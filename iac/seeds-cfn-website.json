@@ -9,6 +9,115 @@
           "ErrorDocument": "error.html"
         }
       }
+    },
+    "S3BucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "S3Bucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "S3Bucket"
+                    },
+                    "/*"
+                  ]
+                ]
+              },
+              "Principal": {
+                "AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity E18CKBVEF4NJY7"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "myDistribution": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Origins": [
+            {
+              "DomainName": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "S3Bucket"
+                    },
+                    ".s3.amazonaws.com"
+                  ]
+                ]
+              },
+              "Id": "myS3Origin",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": ""
+              }
+            }
+          ],
+          "Enabled": "true",
+          "Comment": "Some comment",
+          "DefaultRootObject": "index.html",
+          "DefaultCacheBehavior": {
+            "AllowedMethods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ],
+            "TargetOriginId": "myS3Origin",
+            "ForwardedValues": {
+              "QueryString": "false",
+              "Cookies": {
+                "Forward": "none"
+              }
+            },
+            "ViewerProtocolPolicy": "allow-all"
+          },
+          "PriceClass": "PriceClass_200",
+          "ViewerCertificate": {
+            "CloudFrontDefaultCertificate": "true"
+          }
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "CloudFrontDistroDomain": {
+      "Description": "DNS for CF distro",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            {
+              "Fn::GetAtt": [
+                "myDistribution",
+                "DomainName"
+              ]
+            }
+          ]
+        ]
+      }
+    },
+    "S3BucketName": {
+      "Description": "S3 Bucket Name",
+      "Value": {
+        "Ref": "S3Bucket"
+      }
     }
   }
 }
