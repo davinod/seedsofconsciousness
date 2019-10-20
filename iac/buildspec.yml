@@ -6,5 +6,5 @@ phases:
       nodejs: 8
   build:
     commands:
-       - b="$(aws cloudformation describe-stacks --region ap-southeast-2 --stack-name seeds-website --query 'Stacks[*].Outputs[?OutputKey==`S3BucketName`].{CF:OutputValue}' --output text)" ; aws s3 cp www/* s3://$b
+       - b="$(aws cloudformation describe-stacks --region ap-southeast-2 --stack-name seeds-website --query 'Stacks[*].Outputs[?OutputKey==`S3BucketName`].{CF:OutputValue}' --output text)" ; aws s3 sync www/* s3://$b
 
