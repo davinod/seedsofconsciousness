@@ -47,6 +47,7 @@
       "Type": "AWS::CloudFront::Distribution",
       "Properties": {
         "DistributionConfig": {
+          "Aliases":["www.seedsofconsciousness.com.au","seedsofconsciousness.com.au"],
           "Origins": [
             {
               "DomainName": {
@@ -90,7 +91,8 @@
           },
           "PriceClass": "PriceClass_200",
           "ViewerCertificate": {
-            "CloudFrontDefaultCertificate": "true"
+            "SslSupportMethod": "sni-only",
+            "AcmCertificateArn": "arn:aws:acm:us-east-1:691323865891:certificate/169ba029-e1ec-45a8-a9a1-ff9e36f01847"
           }
         }
       }
