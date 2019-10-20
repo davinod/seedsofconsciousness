@@ -92,7 +92,7 @@
           "PriceClass": "PriceClass_200",
           "ViewerCertificate": {
             "SslSupportMethod": "sni-only",
-            "AcmCertificateArn": "arn:aws:acm:us-east-1:691323865891:certificate/169ba029-e1ec-45a8-a9a1-ff9e36f01847"
+            "AcmCertificateArn": ""
           }
         }
       }
